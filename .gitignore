@@ -1,0 +1,16 @@
+# Excel lock files and temporary files
+~$*
+~*.xlsx
+~*.xlsm
+~*.xlsb
+~*.csv
+
+# General temporary files
+*.tmp
+*.bak
+*.xlk
+
+# OS generated files
+.DS_Store
+Thumbs.db
+Desktop.ini

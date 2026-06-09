@@ -25,8 +25,8 @@ Sub RunDataCleansing()
     pathOBIEE = wsDash.Range("B5").Value
     pathSMax = wsDash.Range("B7").Value
     
-    If pathOBIEE = "" Or pathSMax = "" Then
-        MsgBox "Please select both files first.", vbExclamation
+    If pathOBIEE = "" Then
+        MsgBox "Please select the OBIEE Export File first.", vbExclamation
         Exit Sub
     End If
     
@@ -43,9 +43,15 @@ Sub RunDataCleansing()
         GoTo Cleanup
     End If
     
-    ' Step 2: Load ServiceMax existing keys
-    Set dictSMax = BuildServiceMaxDictionary(pathSMax)
-    If dictSMax Is Nothing Then GoTo Cleanup ' Halt if error occurred during load
+    ' Step 2: Load ServiceMax existing keys (OPTIONAL)
+    If pathSMax <> "" Then
+        Set dictSMax = BuildServiceMaxDictionary(pathSMax)
+        If dictSMax Is Nothing Then GoTo Cleanup ' Halt if error occurred during load
+    Else
+        ' If no ServiceMax file is provided, create an empty dictionary 
+        ' so all valid OBIEE records pass the duplicate check.
+        Set dictSMax = CreateObject("Scripting.Dictionary")
+    End If
     
     ' Step 3: Clear Output sheet
     wsOutput.Cells.Clear
