@@ -1,0 +1,55 @@
+1. Run OBIEE Shipment Query
+Manuel steps:
+    - Open OBIEE
+    - Open ULS Japan report
+    - Set date range, last 7 days
+    - Export result to excel
+Why:
+    - GL prod may take 24-48 HRS to update
+    - OBIEE is used as an extra check to catch missing/new Shipments
+
+2. Filter for ULS ASEAN/ANZ
+After exporting the result to excel, filter the result for ULS ASEAN/ANZ
+Country filter:
+    - Open the excel file
+    - Filter the 'Region' column for 'ASEAN' and 'ANZ'
+    - ULS ASEAN/ANZ country list / short codes
+
+Modality / Order filter:
+ULS Normally have:
+    - Sales order number starting with 5
+
+    Remove:
+        - LCS
+        - DI
+        - Non-ULS orders
+        - Other irrelavant modalities
+    So after filtering the excel file will only contain:
+        - ULS ASEAN/ANZ Shipments
+        
+3. Remove already created IPs
+This is a duplicate prevention step.
+
+Step A: Querying ServiceMax
+In servicemax, user queries IPs using "Sales order number"
+
+Step B: Create unique key in both files
+In OBIEE file and servicemax export, create a unique key:
+    Sales Order number + ESET + Serial Number
+    Example: 5678901_1_SERIAL123
+
+Step C: VLOOKUP between OBIEE and ServiceMax
+Use the key to check:
+    - Does this shipment already exist in ServiceMax?
+
+Step D:
+If key exists in servicemax:
+    - IP already created
+    - Remove from new IP creation list
+
+Step E: Remaining records
+Records not found in servicemax are:
+    -> New IPs to be created from OBIEE data
+
+Validation and DLT Logic in a new text file...
+
